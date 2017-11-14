@@ -270,7 +270,7 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         if (self.inAppBrowserViewController != nil) {
             _previousStatusBarStyle = -1;
-            [self.inAppBrowserViewController.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+            [self.viewController dismissViewControllerAnimated:YES completion:nil];
         }
     });
 }
@@ -439,6 +439,14 @@
         [theWebView stopLoading];
         [self openInSystem:url];
         return NO;
+    }
+    else if (![[ url scheme] isEqualToString:@"http"] &&
+             ![[ url scheme] isEqualToString:@"https"] &&
+             ![[ url scheme] isEqualToString:@"file"] &&
+             ![[ url scheme] isEqualToString:@"about"]) {
+         [theWebView stopLoading];
+         [self openInSystem:url];
+         return NO;
     }
     else if ((self.callbackId != nil) && isTopLevelNavigation) {
         // Send a loadstart event for each top-level navigation (includes redirects).
